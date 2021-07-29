@@ -1,0 +1,32 @@
+name: ${name}
+version: ${project.version}
+main: ${mainClass}
+depend: [Vault]
+authors: [royalkingkb]
+api-version: 1.16
+commands:
+  vote:
+    description: Get the link to vote for the server
+  rules:
+    description: View the server rules
+  help:
+    description: Get help and tutorials
+  suicide:
+    description: Commit die
+  uptime:
+    description: View how long the server has been up for
+  store:
+    description: View the store link
+    aliases: [donate, sponsor, ranks]
+  showplaytime:
+    description: Show your playtime
+  showkills:
+    description: Show your kills
+  showdeaths:
+    description: Show your deaths
+  showkdr:
+    description: Show your kill-death-ratio
+  adminmode:
+    permission: stevecinema.command.adminmode
+  broadcast:
+    permission: stevecinema.command.broadcast
