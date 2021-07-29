@@ -1,4 +1,4 @@
-package com.stevecinema.helpers.command;
+package com.stevecinema.helpers.command.general;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;

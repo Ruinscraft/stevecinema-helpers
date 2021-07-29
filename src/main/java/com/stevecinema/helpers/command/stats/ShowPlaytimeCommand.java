@@ -1,13 +1,13 @@
 package com.stevecinema.helpers.command.stats;
 
+import com.stevecinema.helpers.command.RateLimitedCommandExecutor;
 import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 
-public class ShowPlaytimeCommand implements CommandExecutor {
+public class ShowPlaytimeCommand extends RateLimitedCommandExecutor {
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+    public boolean onRateLimitedCommand(CommandSender sender, Command command, String label, String[] args) {
         return true;
     }
 

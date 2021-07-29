@@ -27,10 +27,13 @@ public class PlayerStatsManager implements Listener {
         helpersPlugin.getServer().getScheduler().runTaskTimerAsynchronously(helpersPlugin, new PlayerStatsSaveRunnable(), oneMinuteTicks, oneMinuteTicks);
     }
 
+    public PlayerStats getStats(Player player) {
+        return statsCache.get(player.getUniqueId());
+    }
+
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
-
         helpersPlugin.getPlayerStatsStorage().loadPlayerStats(player.getUniqueId()).thenAccept(playerStats -> {
             if (player.isOnline()) {
                 statsCache.put(player.getUniqueId(), playerStats);

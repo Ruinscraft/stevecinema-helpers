@@ -1,6 +1,6 @@
 package com.stevecinema.helpers;
 
-import com.stevecinema.helpers.command.*;
+import com.stevecinema.helpers.command.general.*;
 import com.stevecinema.helpers.command.staff.AdminModeCommand;
 import com.stevecinema.helpers.command.staff.BroadcastCommand;
 import com.stevecinema.helpers.command.stats.ShowDeathsCommand;
