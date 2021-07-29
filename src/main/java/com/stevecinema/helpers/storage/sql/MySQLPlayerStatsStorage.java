@@ -3,6 +3,7 @@ package com.stevecinema.helpers.storage.sql;
 import com.stevecinema.helpers.storage.PlayerStats;
 
 import java.sql.*;
+import java.util.List;
 import java.util.UUID;
 
 public abstract class MySQLPlayerStatsStorage extends SQLPlayerStatsStorage {
@@ -19,14 +20,32 @@ public abstract class MySQLPlayerStatsStorage extends SQLPlayerStatsStorage {
         }
     }
 
+    private PreparedStatement createPlayerStatsUpsertStatement(Connection connection) throws SQLException {
+        return connection.prepareStatement("INSERT INTO player_stats (player_id) VALUES (?) ON DUPLICATE KEY UPDATE play_minutes = ?, kills = ?, deaths = ?;");
+    }
+
     @Override
     public void upsertPlayerStats(PlayerStats playerStats, Connection connection) throws SQLException {
-        try (PreparedStatement upsert = connection.prepareStatement("INSERT INTO player_stats (player_id) VALUES (?) ON DUPLICATE KEY UPDATE play_minutes = ?, kills = ?, deaths = ?;")) {
+        try (PreparedStatement upsert = createPlayerStatsUpsertStatement(connection)) {
             upsert.setString(1, playerStats.getPlayerId().toString());
             upsert.setInt(2, playerStats.getPlayMinutes());
             upsert.setInt(3, playerStats.getKills());
             upsert.setInt(4, playerStats.getDeaths());
             upsert.execute();
+        }
+    }
+
+    @Override
+    public void upsertPlayerStatsBatch(List<PlayerStats> playerStatsBatch, Connection connection) throws SQLException {
+        try (PreparedStatement upsert = createPlayerStatsUpsertStatement(connection)) {
+            for (PlayerStats playerStats : playerStatsBatch) {
+                upsert.setString(1, playerStats.getPlayerId().toString());
+                upsert.setInt(2, playerStats.getPlayMinutes());
+                upsert.setInt(3, playerStats.getKills());
+                upsert.setInt(4, playerStats.getDeaths());
+                upsert.addBatch();
+            }
+            upsert.executeBatch();
         }
     }
 

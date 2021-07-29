@@ -5,6 +5,7 @@ import com.stevecinema.helpers.storage.PlayerStatsStorage;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 
@@ -15,6 +16,17 @@ public abstract class SQLPlayerStatsStorage extends PlayerStatsStorage {
         return CompletableFuture.runAsync(() -> {
             try (Connection connection = getConnection()) {
                 upsertPlayerStats(playerStats, connection);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @Override
+    public CompletableFuture<Void> savePlayerStatsBatch(List<PlayerStats> playerStatsBatch) {
+        return CompletableFuture.runAsync(() -> {
+            try (Connection connection = getConnection()) {
+                upsertPlayerStatsBatch(playerStatsBatch, connection);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -40,6 +52,8 @@ public abstract class SQLPlayerStatsStorage extends PlayerStatsStorage {
     public abstract void createTables(Connection connection) throws SQLException;
 
     public abstract void upsertPlayerStats(PlayerStats playerStats, Connection connection) throws SQLException;
+
+    public abstract void upsertPlayerStatsBatch(List<PlayerStats> playerStatsBatch, Connection connection) throws SQLException;
 
     public abstract PlayerStats queryPlayerStats(UUID playerId, Connection connection) throws SQLException;
 
