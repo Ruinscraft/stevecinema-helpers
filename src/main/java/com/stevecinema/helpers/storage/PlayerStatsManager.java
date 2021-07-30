@@ -25,6 +25,7 @@ public class PlayerStatsManager implements Listener {
         // Save cache every minute
         long oneMinuteTicks = 20L * 60;
         helpersPlugin.getServer().getScheduler().runTaskTimerAsynchronously(helpersPlugin, new PlayerStatsSaveRunnable(), oneMinuteTicks, oneMinuteTicks);
+        helpersPlugin.getServer().getPluginManager().registerEvents(this, helpersPlugin);
     }
 
     public PlayerStats getStats(Player player) {

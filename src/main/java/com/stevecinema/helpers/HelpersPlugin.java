@@ -1,6 +1,5 @@
 package com.stevecinema.helpers;
 
-import com.stevecinema.helpers.command.general.ShowStatsCommand;
 import com.stevecinema.helpers.command.general.*;
 import com.stevecinema.helpers.command.staff.AdminModeCommand;
 import com.stevecinema.helpers.command.staff.BroadcastCommand;
@@ -15,6 +14,7 @@ public class HelpersPlugin extends JavaPlugin {
 
     private PlayerStatsStorage playerStatsStorage;
     private PlayerStatsManager playerStatsManager;
+    private AdminModeManager adminModeManager;
 
     public PlayerStatsStorage getPlayerStatsStorage() {
         return playerStatsStorage;
@@ -22,6 +22,10 @@ public class HelpersPlugin extends JavaPlugin {
 
     public PlayerStatsManager getPlayerStatsManager() {
         return playerStatsManager;
+    }
+
+    public AdminModeManager getAdminModeManager() {
+        return adminModeManager;
     }
 
     @Override
@@ -44,12 +48,13 @@ public class HelpersPlugin extends JavaPlugin {
             getLogger().info("PlayerStats storage not enabled");
         } else {
             playerStatsManager = new PlayerStatsManager(this);
-
-            getServer().getPluginManager().registerEvents(playerStatsManager, this);
             getServer().getPluginManager().registerEvents(new PlayerStatsListener(playerStatsManager), this);
-
             getCommand("showstats").setExecutor(new ShowStatsCommand(playerStatsManager));
         }
+
+        adminModeManager = new AdminModeManager(this);
+
+        new WorldListener(this);
 
         getCommand("vote").setExecutor(new VoteCommand());
         getCommand("rules").setExecutor(new RulesCommand());
@@ -59,7 +64,7 @@ public class HelpersPlugin extends JavaPlugin {
         getCommand("store").setExecutor(new StoreCommand());
 
         // Staff
-        getCommand("adminmode").setExecutor(new AdminModeCommand());
+        getCommand("adminmode").setExecutor(new AdminModeCommand(adminModeManager));
         getCommand("broadcast").setExecutor(new BroadcastCommand());
     }
 
