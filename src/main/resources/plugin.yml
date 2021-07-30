@@ -18,14 +18,9 @@ commands:
   store:
     description: View the store link
     aliases: [donate, sponsor, ranks]
-  showplaytime:
-    description: Show your playtime
-  showkills:
-    description: Show your kills
-  showdeaths:
-    description: Show your deaths
-  showkdr:
-    description: Show your kill-death-ratio
+  showstats:
+    description: Show your stats or someone else's
+    aliases: [stats]
   adminmode:
     permission: stevecinema.command.adminmode
   broadcast:

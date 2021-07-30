@@ -27,7 +27,7 @@ public abstract class RateLimitedCommandExecutor implements CommandExecutor {
 
         if (recentUsers.containsKey(player.getUniqueId())) {
             long lastUse = recentUsers.get(player.getUniqueId());
-            if (lastUse + TimeUnit.SECONDS.toMillis(30) > System.currentTimeMillis()) {
+            if (lastUse + TimeUnit.SECONDS.toMillis(3) > System.currentTimeMillis()) {
                 player.sendMessage(ChatColor.RED + "Wait to use this command again.");
                 return true;
             }
@@ -35,12 +35,10 @@ public abstract class RateLimitedCommandExecutor implements CommandExecutor {
 
         recentUsers.put(player.getUniqueId(), System.currentTimeMillis());
 
-        onRateLimitedCommand(sender, command, label, args);
-
-        return true;
+        return onRateLimitedCommand(player, command, label, args);
     }
 
 
-    public abstract boolean onRateLimitedCommand(CommandSender sender, Command command, String label, String[] args);
+    public abstract boolean onRateLimitedCommand(Player player, Command command, String label, String[] args);
 
 }

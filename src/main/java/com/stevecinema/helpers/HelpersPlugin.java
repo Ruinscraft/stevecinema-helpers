@@ -1,12 +1,9 @@
 package com.stevecinema.helpers;
 
+import com.stevecinema.helpers.command.general.ShowStatsCommand;
 import com.stevecinema.helpers.command.general.*;
 import com.stevecinema.helpers.command.staff.AdminModeCommand;
 import com.stevecinema.helpers.command.staff.BroadcastCommand;
-import com.stevecinema.helpers.command.stats.ShowDeathsCommand;
-import com.stevecinema.helpers.command.stats.ShowKDRCommand;
-import com.stevecinema.helpers.command.stats.ShowKillsCommand;
-import com.stevecinema.helpers.command.stats.ShowPlaytimeCommand;
 import com.stevecinema.helpers.storage.PlayerStatsManager;
 import com.stevecinema.helpers.storage.PlayerStatsStorage;
 import com.stevecinema.helpers.storage.sql.UnpooledMySQLPlayerStatsStorage;
@@ -49,11 +46,9 @@ public class HelpersPlugin extends JavaPlugin {
             playerStatsManager = new PlayerStatsManager(this);
 
             getServer().getPluginManager().registerEvents(playerStatsManager, this);
+            getServer().getPluginManager().registerEvents(new PlayerStatsListener(playerStatsManager), this);
 
-            getCommand("showplaytime").setExecutor(new ShowPlaytimeCommand());
-            getCommand("showkills").setExecutor(new ShowKillsCommand());
-            getCommand("showdeaths").setExecutor(new ShowDeathsCommand());
-            getCommand("showkdr").setExecutor(new ShowKDRCommand());
+            getCommand("showstats").setExecutor(new ShowStatsCommand(playerStatsManager));
         }
 
         getCommand("vote").setExecutor(new VoteCommand());

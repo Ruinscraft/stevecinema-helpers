@@ -36,6 +36,7 @@ public class PlayerStatsManager implements Listener {
         Player player = event.getPlayer();
         helpersPlugin.getPlayerStatsStorage().loadPlayerStats(player.getUniqueId()).thenAccept(playerStats -> {
             if (player.isOnline()) {
+                playerStats.setLoginTime();
                 statsCache.put(player.getUniqueId(), playerStats);
             }
         });

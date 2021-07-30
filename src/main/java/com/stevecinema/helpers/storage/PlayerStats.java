@@ -9,6 +9,8 @@ public class PlayerStats {
     private int kills;
     private int deaths;
 
+    private transient long loginTime;
+
     public PlayerStats(UUID playerId) {
         this.playerId = playerId;
     }
@@ -25,15 +27,33 @@ public class PlayerStats {
     }
 
     public int getPlayMinutes() {
-        return playMinutes;
+        if (loginTime > 0) {
+            int secondsSinceLogin = (int) (System.currentTimeMillis() - loginTime) / 1000;
+            int minutesSinceLogin = secondsSinceLogin / 60;
+            return playMinutes + minutesSinceLogin;
+        } else {
+            return playMinutes;
+        }
     }
 
     public int getKills() {
         return kills;
     }
 
+    public void addKill() {
+        kills++;
+    }
+
     public int getDeaths() {
         return deaths;
+    }
+
+    public void addDeath() {
+        deaths++;
+    }
+
+    public void setLoginTime() {
+        loginTime = System.currentTimeMillis();
     }
 
 }
