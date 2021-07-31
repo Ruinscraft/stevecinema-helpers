@@ -3,9 +3,12 @@ package com.stevecinema.helpers;
 import com.stevecinema.helpers.command.general.*;
 import com.stevecinema.helpers.command.staff.AdminModeCommand;
 import com.stevecinema.helpers.command.staff.BroadcastCommand;
+import com.stevecinema.helpers.listener.PlayerStatsListener;
+import com.stevecinema.helpers.listener.WorldListener;
 import com.stevecinema.helpers.storage.PlayerStatsManager;
 import com.stevecinema.helpers.storage.PlayerStatsStorage;
 import com.stevecinema.helpers.storage.sql.UnpooledMySQLPlayerStatsStorage;
+import com.stevecinema.helpers.util.VaultUtil;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -66,6 +69,11 @@ public class HelpersPlugin extends JavaPlugin {
         // Staff
         getCommand("adminmode").setExecutor(new AdminModeCommand(adminModeManager));
         getCommand("broadcast").setExecutor(new BroadcastCommand());
+
+        if (!VaultUtil.init(this)) {
+            getServer().getPluginManager().disablePlugin(this);
+            return;
+        }
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.stevecinema.helpers;
+package com.stevecinema.helpers.listener;
 
 import com.stevecinema.helpers.storage.PlayerStatsManager;
 import org.bukkit.entity.Player;

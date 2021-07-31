@@ -1,6 +1,6 @@
 package com.stevecinema.helpers.command.general;
 
-import com.stevecinema.helpers.ChatUtil;
+import com.stevecinema.helpers.util.ChatUtil;
 import org.apache.commons.lang.time.DurationFormatUtils;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -17,7 +17,7 @@ public class UptimeCommand implements CommandExecutor {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         long diff = System.currentTimeMillis() - startupTime;
-        sender.sendMessage(ChatUtil.COLOR_2 + "The server has been up for " + ChatUtil.COLOR_3 + DurationFormatUtils.formatDurationWords(diff, true, true));
+        sender.sendMessage(ChatUtil.COLOR_2 + "The server has been up for: " + ChatUtil.COLOR_3 + DurationFormatUtils.formatDurationWords(diff, true, true));
         return true;
     }
 

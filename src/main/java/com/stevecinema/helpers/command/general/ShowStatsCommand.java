@@ -1,6 +1,6 @@
 package com.stevecinema.helpers.command.general;
 
-import com.stevecinema.helpers.ChatUtil;
+import com.stevecinema.helpers.util.ChatUtil;
 import com.stevecinema.helpers.command.RateLimitedCommandExecutor;
 import com.stevecinema.helpers.storage.PlayerStats;
 import com.stevecinema.helpers.storage.PlayerStatsManager;
@@ -34,7 +34,7 @@ public class ShowStatsCommand extends RateLimitedCommandExecutor {
 
         PlayerStats playerStats = playerStatsManager.getStats(target);
         int playtimeHours = playerStats.getPlayMinutes() / 60;
-        String message = ChatUtil.COLOR_1 + "[STATS] " + ChatUtil.COLOR_2 + player.getName() +
+        String message = ChatUtil.COLOR_3 + "[STATS] " + ChatUtil.COLOR_2 + player.getName() +
                 " :: kills=" +
                 playerStats.getKills() +
                 " : deaths=" +

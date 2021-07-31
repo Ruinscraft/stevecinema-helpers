@@ -1,7 +1,7 @@
 package com.stevecinema.helpers.command.staff;
 
 import com.stevecinema.helpers.AdminModeManager;
-import com.stevecinema.helpers.ChatUtil;
+import com.stevecinema.helpers.util.ChatUtil;
 import com.stevecinema.helpers.command.RateLimitedCommandExecutor;
 import org.bukkit.command.Command;
 import org.bukkit.entity.Player;

@@ -1,5 +1,6 @@
-package com.stevecinema.helpers;
+package com.stevecinema.helpers.listener;
 
+import com.stevecinema.helpers.HelpersPlugin;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
