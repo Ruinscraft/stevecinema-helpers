@@ -8,6 +8,7 @@ public class SuicideCommand extends RateLimitedCommandExecutor {
 
     @Override
     public boolean onRateLimitedCommand(Player player, Command command, String label, String[] args) {
+        player.setHealth(0.0f);
         return true;
     }
 
