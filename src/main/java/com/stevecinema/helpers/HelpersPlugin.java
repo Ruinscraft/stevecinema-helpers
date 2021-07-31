@@ -18,6 +18,7 @@ public class HelpersPlugin extends JavaPlugin {
     private PlayerStatsStorage playerStatsStorage;
     private PlayerStatsManager playerStatsManager;
     private AdminModeManager adminModeManager;
+    private TimedRewardManager timedRewardManager;
 
     public PlayerStatsStorage getPlayerStatsStorage() {
         return playerStatsStorage;
@@ -29,6 +30,10 @@ public class HelpersPlugin extends JavaPlugin {
 
     public AdminModeManager getAdminModeManager() {
         return adminModeManager;
+    }
+
+    public TimedRewardManager getTimedRewardManager() {
+        return timedRewardManager;
     }
 
     @Override
@@ -56,6 +61,7 @@ public class HelpersPlugin extends JavaPlugin {
         }
 
         adminModeManager = new AdminModeManager(this);
+        timedRewardManager = new TimedRewardManager(this);
 
         new WorldListener(this);
 
