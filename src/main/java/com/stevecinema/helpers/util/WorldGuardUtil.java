@@ -33,6 +33,13 @@ public final class WorldGuardUtil {
         return players;
     }
 
+    public static Set<Player> getPlayersInRegion(org.bukkit.World world, String id) {
+        World wgWorld = BukkitAdapter.adapt(world);
+        ProtectedRegion region = getWorldGuard().getPlatform().getRegionContainer().get(wgWorld).getRegion(id);
+        if (region == null) return new HashSet<>();
+        return getPlayersInRegion(region);
+    }
+
     public static boolean playerIsInRegion(Player player, String id) {
         World wgWorld = BukkitAdapter.adapt(player.getWorld());
         ProtectedRegion region = getWorldGuard().getPlatform().getRegionContainer().get(wgWorld).getRegion(id);

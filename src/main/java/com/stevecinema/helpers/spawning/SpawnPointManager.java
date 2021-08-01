@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerRespawnEvent;
 
 import java.util.*;
@@ -88,6 +89,7 @@ public class SpawnPointManager implements Listener {
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
+        event.getDrops().clear();
         final Location spawnPoint;
         if (WorldGuardUtil.playerIsInRegion(player, "pit_main") || WorldGuardUtil.playerIsInRegion(player, "pit_tower")) {
             spawnPoint = getRandomSpawnPointAtPit();
@@ -109,6 +111,11 @@ public class SpawnPointManager implements Listener {
         Player player = event.getPlayer();
         Location spawnPoint = getRandomSpawnPoint();
         player.teleport(spawnPoint);
+    }
+
+    @EventHandler
+    public void onQuit(PlayerQuitEvent event) {
+        playerRespawns.remove(event.getPlayer());
     }
 
 }

@@ -5,6 +5,7 @@ import com.stevecinema.helpers.command.staff.AddSpawnPointCommand;
 import com.stevecinema.helpers.command.staff.AdminModeCommand;
 import com.stevecinema.helpers.command.staff.BroadcastCommand;
 import com.stevecinema.helpers.command.staff.GetItemCommand;
+import com.stevecinema.helpers.listener.PlayerListener;
 import com.stevecinema.helpers.listener.PlayerStatsListener;
 import com.stevecinema.helpers.listener.WorldListener;
 import com.stevecinema.helpers.spawning.SpawnPointManager;
@@ -25,6 +26,7 @@ public class HelpersPlugin extends JavaPlugin {
     private AdminModeManager adminModeManager;
     private TimedRewardManager timedRewardManager;
     private SpawnPointManager spawnPointManager;
+    private PitManager pitManager;
 
     public PlayerStatsStorage getPlayerStatsStorage() {
         return playerStatsStorage;
@@ -44,6 +46,10 @@ public class HelpersPlugin extends JavaPlugin {
 
     public SpawnPointManager getSpawnPointManager() {
         return spawnPointManager;
+    }
+
+    public PitManager getPitManager() {
+        return pitManager;
     }
 
     @Override
@@ -73,8 +79,10 @@ public class HelpersPlugin extends JavaPlugin {
         adminModeManager = new AdminModeManager(this);
         timedRewardManager = new TimedRewardManager(this);
         spawnPointManager = new SpawnPointManager(this);
+        pitManager = new PitManager(this);
 
         new WorldListener(this);
+        new PlayerListener(this);
 
         getCommand("vote").setExecutor(new VoteCommand());
         getCommand("rules").setExecutor(new RulesCommand());
