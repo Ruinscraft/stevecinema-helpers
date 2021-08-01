@@ -25,3 +25,9 @@ commands:
     permission: stevecinema.command.adminmode
   broadcast:
     permission: stevecinema.command.broadcast
+  getitem:
+    permission: stevecinema.command.getitem
+  addspawnpoint:
+    permission: stevecinema.command.addspawnpoint
+  addpitspawnpoint:
+    permission: stevecinema.command.addpitspawnpoint

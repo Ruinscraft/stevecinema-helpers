@@ -1,14 +1,19 @@
 package com.stevecinema.helpers;
 
 import com.stevecinema.helpers.command.general.*;
+import com.stevecinema.helpers.command.staff.AddSpawnPointCommand;
 import com.stevecinema.helpers.command.staff.AdminModeCommand;
 import com.stevecinema.helpers.command.staff.BroadcastCommand;
+import com.stevecinema.helpers.command.staff.GetItemCommand;
 import com.stevecinema.helpers.listener.PlayerStatsListener;
 import com.stevecinema.helpers.listener.WorldListener;
+import com.stevecinema.helpers.spawning.SpawnPointManager;
 import com.stevecinema.helpers.storage.PlayerStatsManager;
 import com.stevecinema.helpers.storage.PlayerStatsStorage;
 import com.stevecinema.helpers.storage.sql.UnpooledMySQLPlayerStatsStorage;
 import com.stevecinema.helpers.util.VaultUtil;
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
@@ -19,6 +24,7 @@ public class HelpersPlugin extends JavaPlugin {
     private PlayerStatsManager playerStatsManager;
     private AdminModeManager adminModeManager;
     private TimedRewardManager timedRewardManager;
+    private SpawnPointManager spawnPointManager;
 
     public PlayerStatsStorage getPlayerStatsStorage() {
         return playerStatsStorage;
@@ -34,6 +40,10 @@ public class HelpersPlugin extends JavaPlugin {
 
     public TimedRewardManager getTimedRewardManager() {
         return timedRewardManager;
+    }
+
+    public SpawnPointManager getSpawnPointManager() {
+        return spawnPointManager;
     }
 
     @Override
@@ -62,6 +72,7 @@ public class HelpersPlugin extends JavaPlugin {
 
         adminModeManager = new AdminModeManager(this);
         timedRewardManager = new TimedRewardManager(this);
+        spawnPointManager = new SpawnPointManager(this);
 
         new WorldListener(this);
 
@@ -75,10 +86,18 @@ public class HelpersPlugin extends JavaPlugin {
         // Staff
         getCommand("adminmode").setExecutor(new AdminModeCommand(adminModeManager));
         getCommand("broadcast").setExecutor(new BroadcastCommand());
+        getCommand("getitem").setExecutor(new GetItemCommand());
+        getCommand("addspawnpoint").setExecutor(new AddSpawnPointCommand(this));
 
         if (!VaultUtil.init(this)) {
             getServer().getPluginManager().disablePlugin(this);
             return;
+        }
+
+        // In case of reload
+        for (Player player : getServer().getOnlinePlayers()) {
+            PlayerJoinEvent event = new PlayerJoinEvent(player, "");
+            playerStatsManager.onJoin(event);
         }
     }
 
