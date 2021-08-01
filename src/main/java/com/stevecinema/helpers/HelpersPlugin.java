@@ -90,6 +90,9 @@ public class HelpersPlugin extends JavaPlugin {
         getCommand("suicide").setExecutor(new SuicideCommand());
         getCommand("uptime").setExecutor(new UptimeCommand());
         getCommand("store").setExecutor(new StoreCommand());
+        TeleportRequestCommand teleportRequestCommand = new TeleportRequestCommand(this);
+        getCommand("tp").setExecutor(teleportRequestCommand);
+        getCommand("tpa").setExecutor(teleportRequestCommand);
 
         // Staff
         getCommand("adminmode").setExecutor(new AdminModeCommand(adminModeManager));

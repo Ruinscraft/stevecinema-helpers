@@ -21,6 +21,12 @@ commands:
   showstats:
     description: Show your stats or someone else's
     aliases: [stats]
+  tp:
+    description: Request to teleport to someone
+    aliases: [teleport]
+  tpa:
+    description: Accept a teleport request
+    aliases: [tpaccept]
   adminmode:
     permission: stevecinema.command.adminmode
   broadcast:
