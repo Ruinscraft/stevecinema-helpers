@@ -2,76 +2,113 @@ package com.stevecinema.helpers.spawning;
 
 import com.stevecinema.helpers.HelpersPlugin;
 import com.stevecinema.helpers.util.WorldGuardUtil;
+import org.bukkit.Location;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
+import java.util.*;
 
 public class SpawnPointManager implements Listener {
 
     private static final Random RANDOM = new Random();
 
     private HelpersPlugin helpersPlugin;
-    private List<SpawnPoint> spawnPoints;
-    private List<SpawnPoint> pitSpawnPoints;
+    private List<Location> spawnPointsAtSpawn;
+    private List<Location> spawnPointsAtPit;
+    private List<Location> spawnPointsAwayFromSpawn;
     private Map<Player, Integer> recentDeaths;
 
     public SpawnPointManager(HelpersPlugin helpersPlugin) {
         this.helpersPlugin = helpersPlugin;
-        spawnPoints = new ArrayList<>();
-        pitSpawnPoints = new ArrayList<>();
-        recentDeaths = new ConcurrentHashMap<>();
+        spawnPointsAtSpawn = loadSpawnPoints("spawnpoints");
+        spawnPointsAtPit = loadSpawnPoints("pitspawnpoints");
+        spawnPointsAwayFromSpawn = loadSpawnPoints("remotespawnpoints");
         long fiveMinsInTicks = 20L * 60 * 5;
         helpersPlugin.getServer().getScheduler().runTaskTimer(helpersPlugin, () -> {
 
         }, fiveMinsInTicks, fiveMinsInTicks);
+        helpersPlugin.getServer().getPluginManager().registerEvents(this, helpersPlugin);
     }
 
-    public void addSpawnPoint(SpawnPoint spawnPoint) {
-
+    public void saveSpawnPoint(Location location, String nodeName) {
+       ConfigurationSection section = helpersPlugin.getConfig().getConfigurationSection(nodeName);
+       if (section == null) {
+           section = helpersPlugin.getConfig().createSection(nodeName);
+       }
+       String id = UUID.randomUUID().toString().substring(0, 8);
+       section.set(id, location);
+       helpersPlugin.saveConfig();
     }
 
-    public void addPitSpawnPoint(SpawnPoint spawnPoint) {
-
-    }
-
-    public SpawnPoint getRandomSpawnPoint(boolean requireAwayFromSpawn) {
-        if (requireAwayFromSpawn) {
-            return spawnPoints.stream()
-                    .filter(SpawnPoint::isAwayFromSpawn)
-                    .collect(Collectors.toList())
-                    .get(RANDOM.nextInt(spawnPoints.size()));
-        } else {
-            return spawnPoints.get(RANDOM.nextInt(spawnPoints.size()));
+    public List<Location> loadSpawnPoints(String nodeName) {
+        ConfigurationSection section = helpersPlugin.getConfig().getConfigurationSection(nodeName);
+        List<Location> spawnPoints = new ArrayList<>();
+        if (section != null) {
+            for (String id : section.getKeys(false)) {
+                spawnPoints.add(section.getLocation(id));
+            }
         }
+        return spawnPoints;
     }
 
-    public SpawnPoint getRandomPitSpawnPoint() {
-        return pitSpawnPoints.get(RANDOM.nextInt(pitSpawnPoints.size()));
+    public void addSpawnPoint(Location location) {
+        spawnPointsAtSpawn.add(location);
+        saveSpawnPoint(location, "spawnpoints");
     }
+
+    public void addSpawnPointAtPit(Location location) {
+        spawnPointsAtPit.add(location);
+        saveSpawnPoint(location, "pitspawnpoints");
+    }
+
+    public void addSpawnPointAwayFromSpawn(Location location) {
+        spawnPointsAwayFromSpawn.add(location);
+        saveSpawnPoint(location, "remotespawnpoints");
+    }
+
+    public Location getRandomSpawnPoint() {
+        return spawnPointsAtSpawn.get(RANDOM.nextInt(spawnPointsAtSpawn.size()));
+    }
+
+    public Location getRandomSpawnPointAtPit() {
+        return spawnPointsAtPit.get(RANDOM.nextInt(spawnPointsAtPit.size()));
+    }
+
+    public Location getRandomSpawnPointAwayFromSpawn() {
+        return spawnPointsAwayFromSpawn.get(RANDOM.nextInt(spawnPointsAwayFromSpawn.size()));
+    }
+
+    private Map<Player, Location> playerRespawns = new HashMap<>();
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event) {
         Player player = event.getEntity();
-
-        player.spigot().respawn();
-
-        final SpawnPoint spawnPoint;
-
-        if (WorldGuardUtil.playerInPit(player)) {
-            spawnPoint = getRandomPitSpawnPoint();
+        final Location spawnPoint;
+        if (WorldGuardUtil.playerIsInRegion(player, "pit_main") || WorldGuardUtil.playerIsInRegion(player, "pit_tower")) {
+            spawnPoint = getRandomSpawnPointAtPit();
         } else {
-            spawnPoint = getRandomSpawnPoint(false);
+            spawnPoint = getRandomSpawnPoint();
         }
+        playerRespawns.put(player, spawnPoint);
+        helpersPlugin.getServer().getScheduler().scheduleSyncDelayedTask(helpersPlugin, () -> player.spigot().respawn(), 1L);
+    }
 
-        player.teleport(spawnPoint.getLocation());
+    @EventHandler
+    public void onRespawn(PlayerRespawnEvent event) {
+        Player player = event.getPlayer();
+        event.setRespawnLocation(playerRespawns.get(player));
+    }
+
+    @EventHandler
+    public void onJoin(PlayerJoinEvent event) {
+        Player player = event.getPlayer();
+        Location spawnPoint = getRandomSpawnPoint();
+        player.teleport(spawnPoint);
     }
 
 }

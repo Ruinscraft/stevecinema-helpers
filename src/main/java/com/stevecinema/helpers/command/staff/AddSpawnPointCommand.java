@@ -2,7 +2,6 @@ package com.stevecinema.helpers.command.staff;
 
 import com.stevecinema.helpers.HelpersPlugin;
 import com.stevecinema.helpers.command.RateLimitedCommandExecutor;
-import com.stevecinema.helpers.spawning.SpawnPoint;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -19,15 +18,34 @@ public class AddSpawnPointCommand extends RateLimitedCommandExecutor {
     @Override
     public boolean onRateLimitedCommand(Player player, Command command, String label, String[] args) {
         if (args.length < 1) {
-            player.sendMessage(ChatColor.RED + "/" + label + " <awayfromspawn true/false>");
+            player.sendMessage(ChatColor.RED + "/" + label + " <spawn/pit/remote>");
             return true;
         }
 
         Location location = player.getLocation();
-        boolean awayFromSpawn = args[0].equals("true");
-        SpawnPoint spawnPoint = new SpawnPoint(location, awayFromSpawn);
 
+        boolean success = false;
 
+        switch (args[0]) {
+            case "spawn" -> {
+                helpersPlugin.getSpawnPointManager().addSpawnPoint(location);
+                success = true;
+            }
+            case "pit" -> {
+                helpersPlugin.getSpawnPointManager().addSpawnPointAtPit(location);
+                success = true;
+            }
+            case "remote" ->  {
+                helpersPlugin.getSpawnPointManager().addSpawnPointAwayFromSpawn(location);
+                success = true;
+            }
+        }
+
+        if (success) {
+            player.sendMessage(ChatColor.GOLD + "Added spawn point");
+        } else {
+            player.sendMessage(ChatColor.RED + "Invalid spawn point type");
+        }
 
         return true;
     }

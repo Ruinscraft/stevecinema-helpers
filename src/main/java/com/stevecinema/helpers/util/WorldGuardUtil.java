@@ -19,7 +19,6 @@ public final class WorldGuardUtil {
         if (worldGuard == null) {
             worldGuard = WorldGuard.getInstance();
         }
-
         return worldGuard;
     }
 
@@ -34,14 +33,11 @@ public final class WorldGuardUtil {
         return players;
     }
 
-    public static boolean playerInPit(Player player) {
+    public static boolean playerIsInRegion(Player player, String id) {
         World wgWorld = BukkitAdapter.adapt(player.getWorld());
-        for (String regionId : worldGuard.getPlatform().getRegionContainer().get(wgWorld).getRegions().keySet()) {
-            if (regionId.startsWith("pit")) {
-                return true;
-            }
-        }
-        return false;
+        ProtectedRegion region = getWorldGuard().getPlatform().getRegionContainer().get(wgWorld).getRegion(id);
+        if (region == null) return false;
+        return getPlayersInRegion(region).contains(player);
     }
 
 }

@@ -1,7 +1,7 @@
 name: ${name}
 version: ${project.version}
 main: ${mainClass}
-depend: [Vault]
+depend: [Vault, WorldGuard, WorldEdit]
 authors: [royalkingkb]
 api-version: 1.16
 commands:
@@ -29,5 +29,3 @@ commands:
     permission: stevecinema.command.getitem
   addspawnpoint:
     permission: stevecinema.command.addspawnpoint
-  addpitspawnpoint:
-    permission: stevecinema.command.addpitspawnpoint
