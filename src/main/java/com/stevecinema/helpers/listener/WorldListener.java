@@ -1,12 +1,13 @@
 package com.stevecinema.helpers.listener;
 
 import com.stevecinema.helpers.HelpersPlugin;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 
 public class WorldListener implements Listener {
 
@@ -34,8 +35,11 @@ public class WorldListener implements Listener {
     }
 
     @EventHandler
-    public void onInteract(PlayerInteractEvent event) {
-
+    public void onItemSpawn(EntitySpawnEvent event) {
+        if (event.getEntityType() == EntityType.DROPPED_ITEM) {
+            event.getEntity().remove();
+        }
+        event.setCancelled(true);
     }
 
 }
