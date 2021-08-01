@@ -13,6 +13,8 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class TimedRewardManager implements Listener {
 
+    private static final int MAX_SPM = 200;
+
     private HelpersPlugin helpersPlugin;
     private Map<Player, Long> lastRewardTimes;
     private Map<Player, Integer> spmCache;
@@ -41,6 +43,7 @@ public class TimedRewardManager implements Listener {
         private void handleReward(Player player) {
             long now = System.currentTimeMillis();
             int spm = calculateSPM(player);
+            spm = Math.min(spm, MAX_SPM);
 
             if (lastRewardTimes.containsKey(player)) {
                 long msSinceLastReward = now - lastRewardTimes.get(player);
