@@ -7,6 +7,7 @@ import com.stevecinema.helpers.command.staff.BroadcastCommand;
 import com.stevecinema.helpers.command.staff.GetItemCommand;
 import com.stevecinema.helpers.listener.PlayerListener;
 import com.stevecinema.helpers.listener.PlayerStatsListener;
+import com.stevecinema.helpers.listener.SponsorOnlyJoin;
 import com.stevecinema.helpers.listener.WorldListener;
 import com.stevecinema.helpers.spawning.SpawnPointManager;
 import com.stevecinema.helpers.storage.PlayerStatsManager;
@@ -83,7 +84,7 @@ public class HelpersPlugin extends JavaPlugin {
 
         new WorldListener(this);
         new PlayerListener(this);
-//        new SponsorOnlyJoin(this);
+        new SponsorOnlyJoin(this);
 
         getCommand("vote").setExecutor(new VoteCommand());
         getCommand("rules").setExecutor(new RulesCommand());
