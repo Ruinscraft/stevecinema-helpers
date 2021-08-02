@@ -83,6 +83,7 @@ public class HelpersPlugin extends JavaPlugin {
 
         new WorldListener(this);
         new PlayerListener(this);
+//        new SponsorOnlyJoin(this);
 
         getCommand("vote").setExecutor(new VoteCommand());
         getCommand("rules").setExecutor(new RulesCommand());

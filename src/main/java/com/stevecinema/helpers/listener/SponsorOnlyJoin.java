@@ -1,5 +1,6 @@
 package com.stevecinema.helpers.listener;
 
+import com.stevecinema.helpers.HelpersPlugin;
 import net.luckperms.api.LuckPerms;
 import net.luckperms.api.model.user.User;
 import net.luckperms.api.node.Node;
@@ -14,11 +15,12 @@ public class SponsorOnlyJoin implements Listener {
 
     private LuckPerms luckPerms;
 
-    public SponsorOnlyJoin() {
+    public SponsorOnlyJoin(HelpersPlugin helpersPlugin) {
         RegisteredServiceProvider<LuckPerms> provider = Bukkit.getServicesManager().getRegistration(LuckPerms.class);
         if (provider != null) {
             luckPerms = provider.getProvider();
         }
+        helpersPlugin.getServer().getPluginManager().registerEvents(this, helpersPlugin);
     }
 
     @EventHandler
